@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="StatsData" load_steps=2 format=3 uid="uid://bj7luinfauo2l"]
+
+[ext_resource type="Script" path="res://scripts/stats_data.gd" id="1_fpjti"]
+
+[resource]
+script = ExtResource("1_fpjti")
+base_speed = 224
+base_damage = 1
+base_hp = 50
+acceleration = 384
+friction = 768

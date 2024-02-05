@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://b8yv02od38lx6"]
+
+[ext_resource type="Script" path="res://scripts/unit_data.gd" id="1_qg3mm"]
+
+[resource]
+script = ExtResource("1_qg3mm")
+base_speed = 160
+base_damage = 2
+base_hp = 5
+acceleration = 480
+friction = 1920
+attack_type = "Thrust"
+proximity_threshold = 66.0

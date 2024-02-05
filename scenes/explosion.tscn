@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://d3yd357byip3u"]
+
+[ext_resource type="Script" path="res://scripts/explosion.gd" id="1_12od1"]
+[ext_resource type="Texture2D" uid="uid://vs4m8qqa325i" path="res://graphics/explosion_circle.png" id="1_ayehw"]
+
+[node name="Explosion" type="Sprite2D"]
+modulate = Color(1, 0.45098, 0, 0.54902)
+self_modulate = Color(1, 1, 1, 0.392157)
+top_level = true
+texture_filter = 1
+scale = Vector2(1e-05, 1e-05)
+texture = ExtResource("1_ayehw")
+script = ExtResource("1_12od1")

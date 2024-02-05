@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://cgbst1me3p55c"]
+
+[ext_resource type="Script" path="res://scripts/room.gd" id="1_jdq7o"]
+[ext_resource type="TileSet" uid="uid://bqls3pj1xmvxb" path="res://resources/tileset.tres" id="2_nfw4d"]
+
+[node name="Room" type="Node2D"]
+y_sort_enabled = true
+texture_filter = 1
+script = ExtResource("1_jdq7o")
+
+[node name="TileMap" type="TileMap" parent="."]
+y_sort_enabled = true
+texture_filter = 1
+tile_set = ExtResource("2_nfw4d")
+format = 2
+layer_0/name = "Floor"
+layer_0/z_index = -1
+layer_1/name = "Walls"
+layer_1/y_sort_enabled = true
+layer_1/tile_data = PackedInt32Array()
+
+[node name="Detector" type="Area2D" parent="."]
+z_index = 5
+
+[connection signal="body_entered" from="Detector" to="." method="_on_detector_body_entered"]

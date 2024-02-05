@@ -1,0 +1,9 @@
+[gd_scene load_steps=4 format=3 uid="uid://bebo8ney24ne7"]
+
+[ext_resource type="Script" path="res://scripts/enemy_manager.gd" id="1_yygsf"]
+[ext_resource type="PackedScene" uid="uid://ben2s1iwejf2h" path="res://scenes/enemy.tscn" id="2_20a2f"]
+[ext_resource type="PackedScene" uid="uid://bvh7aegv1obey" path="res://scenes/enemy_spear.tscn" id="3_3qt0m"]
+
+[node name="EnemyManager" type="Node2D"]
+script = ExtResource("1_yygsf")
+enemy_scenes = Array[PackedScene]([ExtResource("2_20a2f"), ExtResource("3_3qt0m")])

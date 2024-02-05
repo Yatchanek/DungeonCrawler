@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://c4kbrl661rnsd"]
+
+[ext_resource type="Script" path="res://scripts/world.gd" id="1_6y8hl"]
+[ext_resource type="PackedScene" uid="uid://370mmql50j5e" path="res://scenes/player.tscn" id="2_aodlq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f48uu"]
+resource_local_to_scene = true
+size = Vector2(26, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_grh1q"]
+resource_local_to_scene = true
+size = Vector2(18, 30)
+
+[node name="World" type="Node2D"]
+y_sort_enabled = true
+texture_filter = 1
+script = ExtResource("1_6y8hl")
+
+[node name="Player" parent="." instance=ExtResource("2_aodlq")]
+y_sort_enabled = true
+position = Vector2(250, 250)
+
+[node name="CollisionShape2D" parent="Player/Pivot/WeaponPivot/Weapon/Weapon/Hurtbox" index="0"]
+shape = SubResource("RectangleShape2D_f48uu")
+
+[node name="CollisionShape2D" parent="Player/Hitbox" index="0"]
+shape = SubResource("RectangleShape2D_grh1q")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -100
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0.0588235, 1)
+
+[editable path="Player"]
+[editable path="Player/Pivot/WeaponPivot/Weapon"]
+[editable path="Player/Pivot/WeaponPivot/Weapon/Weapon/Hurtbox"]
+[editable path="Player/Hitbox"]

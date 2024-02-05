@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8y10xi5rojxu"]
+
+[ext_resource type="Script" path="res://scripts/context_steering_component.gd" id="1_licer"]
+
+[node name="ContextSteeringComponent" type="Node"]
+script = ExtResource("1_licer")
