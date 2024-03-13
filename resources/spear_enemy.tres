@@ -6,8 +6,8 @@
 script = ExtResource("1_qg3mm")
 base_speed = 160
 base_damage = 2
-base_hp = 5
+base_hp = 7
 acceleration = 480
 friction = 1920
 attack_type = "Thrust"
-proximity_threshold = 66.0
+proximity_threshold = 85.0

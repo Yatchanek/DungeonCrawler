@@ -36,7 +36,7 @@ func physics_update(delta : float) -> void:
 		elif dist_to_target > actor.unit_data.proximity_threshold * actor.unit_data.proximity_threshold * 4:
 			if can_throw and randf() < 0.1:
 				can_throw = false
-				throw_interval = 1.0
+				throw_interval = 1.5
 				actor.weapon.launch()
 		
 		if new_dir.x < 0:
@@ -49,5 +49,5 @@ func physics_update(delta : float) -> void:
 			actor.velocity = actor.velocity.move_toward(desired_velocity, actor.acceleration * delta)
 	else:
 		transition.emit("IdleState")
-	
+	#actor.queue_redraw()
 	actor.move_and_slide()

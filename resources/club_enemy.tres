@@ -6,8 +6,8 @@
 script = ExtResource("1_yk3r0")
 base_speed = 192
 base_damage = 1
-base_hp = 3
+base_hp = 5
 acceleration = 384
 friction = 1980
 attack_type = "Swing"
-proximity_threshold = 46.0
+proximity_threshold = 60.0

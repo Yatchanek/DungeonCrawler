@@ -1,17 +1,19 @@
-[gd_scene load_steps=24 format=3 uid="uid://ben2s1iwejf2h"]
+[gd_scene load_steps=27 format=3 uid="uid://bvh7aegv1obey"]
 
-[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_gkaj3"]
-[ext_resource type="Resource" uid="uid://bvnl8f7uagem0" path="res://resources/club_enemy.tres" id="2_ri4nb"]
-[ext_resource type="PackedScene" uid="uid://bi1vwqbpbxlva" path="res://scenes/hitbox.tscn" id="2_t6dh1"]
-[ext_resource type="Shader" path="res://resources/hit_flash.gdshader" id="3_04vq3"]
-[ext_resource type="Texture2D" uid="uid://bmj7l7rm1t040" path="res://graphics/enemy_units_rev.png" id="4_xja3w"]
-[ext_resource type="PackedScene" uid="uid://biviu72kq08r0" path="res://scenes/weapon.tscn" id="5_mg36i"]
-[ext_resource type="Script" path="res://scripts/fsm.gd" id="6_plek1"]
-[ext_resource type="Script" path="res://scripts/basic_enemy_idle_state.gd" id="7_c5m08"]
-[ext_resource type="Script" path="res://scripts/basic_enemy_move_state.gd" id="8_nppa7"]
-[ext_resource type="Script" path="res://scripts/basic_enemy_hit_state.gd" id="9_m2f3e"]
-[ext_resource type="Script" path="res://scripts/basic_enemy_attack_state.gd" id="10_7h6nx"]
-[ext_resource type="Script" path="res://scripts/context_steering_component.gd" id="11_n7tg4"]
+[ext_resource type="Script" path="res://scripts/spear_enemy.gd" id="1_vag0m"]
+[ext_resource type="Resource" uid="uid://b8yv02od38lx6" path="res://resources/spear_enemy.tres" id="2_ju2ju"]
+[ext_resource type="PackedScene" uid="uid://bi1vwqbpbxlva" path="res://scenes/hitbox.tscn" id="3_bjs5t"]
+[ext_resource type="Shader" path="res://resources/hit_flash.gdshader" id="4_q1k8i"]
+[ext_resource type="Texture2D" uid="uid://bmj7l7rm1t040" path="res://graphics/enemy_units_rev.png" id="5_u13gp"]
+[ext_resource type="PackedScene" uid="uid://biviu72kq08r0" path="res://scenes/melee_weapon.tscn" id="6_ued7f"]
+[ext_resource type="Script" path="res://scripts/fsm.gd" id="7_50y82"]
+[ext_resource type="Script" path="res://scripts/basic_enemy_idle_state.gd" id="8_dun62"]
+[ext_resource type="Script" path="res://scripts/spear_enemy_move_state.gd" id="9_57h1n"]
+[ext_resource type="Script" path="res://scripts/basic_enemy_hit_state.gd" id="10_nw8r3"]
+[ext_resource type="Script" path="res://scripts/basic_enemy_attack_state.gd" id="11_kd851"]
+[ext_resource type="Script" path="res://scripts/basic_enemy_alert_state.gd" id="12_trscy"]
+[ext_resource type="Script" path="res://scripts/context_steering_component.gd" id="13_y0o5h"]
+[ext_resource type="FontFile" uid="uid://dhnqsh4crp5k8" path="res://resources/ThaleahFat by Rick Hoppmann.ttf" id="14_llvue"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fmt4y"]
 size = Vector2(20, 16)
@@ -24,15 +26,15 @@ size = Vector2(62, 64)
 radius = 224.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gnilm"]
-radius = 48.0
+radius = 90.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lkbvx"]
 resource_local_to_scene = true
-shader = ExtResource("3_04vq3")
+shader = ExtResource("4_q1k8i")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_modifier = 0.0
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_0teom"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sjh26"]
 resource_local_to_scene = true
 size = Vector2(26, 12)
 
@@ -68,7 +70,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [0, 1, 2, 3]
+"values": [8, 9, 10, 11]
 }
 
 [sub_resource type="Animation" id="Animation_otjxg"]
@@ -85,7 +87,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [4, 5, 6, 7]
+"values": [12, 13, 14, 15]
 }
 
 [sub_resource type="Animation" id="Animation_tjjdc"]
@@ -112,7 +114,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [0]
+"values": [8]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_qpvas"]
@@ -123,20 +125,30 @@ _data = {
 "RESET": SubResource("Animation_tjjdc")
 }
 
-[node name="Enemy" type="CharacterBody2D"]
+[sub_resource type="LabelSettings" id="LabelSettings_q2q24"]
+line_spacing = 0.0
+font = ExtResource("14_llvue")
+font_size = 72
+font_color = Color(0, 0, 0, 1)
+outline_size = 5
+outline_color = Color(1, 1, 0, 1)
+
+[node name="SpearEnemy" type="CharacterBody2D"]
 texture_filter = 1
 collision_layer = 4
-collision_mask = 21
-script = ExtResource("1_gkaj3")
-unit_data = ExtResource("2_ri4nb")
+collision_mask = 19
+script = ExtResource("1_vag0m")
+attack_type = "Thrust"
+unit_data = ExtResource("2_ju2ju")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -8)
 shape = SubResource("RectangleShape2D_fmt4y")
 
-[node name="Hitbox" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_t6dh1")]
+[node name="Hitbox" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_bjs5t")]
 collision_layer = 4
-collision_mask = 0
+collision_mask = 2
+monitoring = true
 target = NodePath("..")
 
 [node name="CollisionShape2D" parent="Hitbox" index="0"]
@@ -164,31 +176,27 @@ disabled = true
 
 [node name="Body" type="Sprite2D" parent="Pivot"]
 material = SubResource("ShaderMaterial_lkbvx")
-position = Vector2(0, -32)
-texture = ExtResource("4_xja3w")
+position = Vector2(0, -33)
+texture = ExtResource("5_u13gp")
 hframes = 8
-vframes = 6
+vframes = 10
+frame = 8
 
 [node name="WeaponPivot" type="Marker2D" parent="Pivot"]
 position = Vector2(0, -10)
 
-[node name="Weapon" parent="Pivot/WeaponPivot" node_paths=PackedStringArray("weapon_pivot", "user") instance=ExtResource("5_mg36i")]
-visible = false
+[node name="MeleeWeapon" parent="Pivot/WeaponPivot" node_paths=PackedStringArray("weapon_pivot") instance=ExtResource("6_ued7f")]
 weapon_pivot = NodePath("..")
-user = NodePath("../../..")
 
-[node name="Weapon" parent="Pivot/WeaponPivot/Weapon" index="0"]
-region_rect = Rect2(0, 72, 60, 24)
+[node name="Hurtbox" parent="Pivot/WeaponPivot/MeleeWeapon" index="3"]
+collision_layer = 8
+collision_mask = 49
 
-[node name="Hurtbox" parent="Pivot/WeaponPivot/Weapon/Weapon" index="0"]
-collision_layer = 0
-collision_mask = 17
-
-[node name="CollisionShape2D" parent="Pivot/WeaponPivot/Weapon/Weapon/Hurtbox" index="0"]
-shape = SubResource("RectangleShape2D_0teom")
+[node name="CollisionShape2D" parent="Pivot/WeaponPivot/MeleeWeapon/Hurtbox" index="0"]
+shape = SubResource("RectangleShape2D_sjh26")
 
 [node name="FSM" type="Node" parent="." node_paths=PackedStringArray("current_state", "animator", "actor", "pivot", "context_steering_component")]
-script = ExtResource("6_plek1")
+script = ExtResource("7_50y82")
 current_state = NodePath("IdleState")
 animator = NodePath("../AnimationPlayer")
 actor = NodePath("..")
@@ -196,18 +204,38 @@ pivot = NodePath("../Pivot")
 context_steering_component = NodePath("../ContextSteeringComponent")
 
 [node name="IdleState" type="Node" parent="FSM"]
-script = ExtResource("7_c5m08")
+script = ExtResource("8_dun62")
 
 [node name="MoveState" type="Node" parent="FSM" node_paths=PackedStringArray("cooldown_timer")]
-script = ExtResource("8_nppa7")
+script = ExtResource("9_57h1n")
 cooldown_timer = NodePath("../../AttackCooldownTimer")
 
 [node name="HitState" type="Node" parent="FSM"]
-script = ExtResource("9_m2f3e")
+script = ExtResource("10_nw8r3")
 
 [node name="AttackState" type="Node" parent="FSM" node_paths=PackedStringArray("cooldown_timer")]
-script = ExtResource("10_7h6nx")
+script = ExtResource("11_kd851")
 cooldown_timer = NodePath("../../AttackCooldownTimer")
+
+[node name="AlertState" type="Node" parent="FSM"]
+script = ExtResource("12_trscy")
+
+[node name="ContextSteeringComponent" type="Node2D" parent="." node_paths=PackedStringArray("actor")]
+script = ExtResource("13_y0o5h")
+num_rays = 16
+actor = NodePath("..")
+layers = {
+1: true,
+2: false,
+3: true,
+4: false,
+5: true,
+6: true,
+7: false,
+8: false,
+9: false,
+10: false
+}
 
 [node name="AttackCooldownTimer" type="Timer" parent="."]
 wait_time = 0.75
@@ -217,24 +245,36 @@ one_shot = true
 wait_time = 3.0
 one_shot = true
 
-[node name="ContextSteeringComponent" type="Node" parent="." node_paths=PackedStringArray("actor")]
-script = ExtResource("11_n7tg4")
-actor = NodePath("..")
-collision_mask = 18
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_qpvas")
 }
 
-[connection signal="body_entered" from="Detector" to="." method="_on_detector_body_entered"]
+[node name="ExclamationMark" type="Label" parent="."]
+visible = false
+texture_filter = 1
+offset_left = -5.0
+offset_top = -87.0
+offset_right = 9.0
+offset_bottom = -21.0
+text = "!"
+label_settings = SubResource("LabelSettings_q2q24")
+
+[node name="RayCast" type="RayCast2D" parent="."]
+collision_mask = 49
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
+position = Vector2(0, -10)
+rect = Rect2(-144, -144, 288, 288)
+enable_node_path = NodePath("../FSM")
+
 [connection signal="body_exited" from="Detector" to="." method="_on_detector_body_exited"]
 [connection signal="area_entered" from="AttackSensor" to="." method="_on_attack_sensor_area_entered"]
-[connection signal="animation_finished" from="Pivot/WeaponPivot/Weapon/AnimationPlayer" to="FSM" method="_on_animation_finished"]
+[connection signal="animation_finished" from="Pivot/WeaponPivot/MeleeWeapon/AnimationPlayer" to="FSM" method="_on_animation_finished"]
 [connection signal="timeout" from="AttackCooldownTimer" to="." method="_on_attack_cooldown_timer_timeout"]
 [connection signal="timeout" from="ChaseStopTimer" to="." method="_on_chase_stop_timer_timeout"]
 [connection signal="animation_finished" from="AnimationPlayer" to="FSM" method="_on_animation_finished"]
 
 [editable path="Hitbox"]
-[editable path="Pivot/WeaponPivot/Weapon"]
-[editable path="Pivot/WeaponPivot/Weapon/Weapon/Hurtbox"]
+[editable path="Pivot/WeaponPivot/MeleeWeapon"]
+[editable path="Pivot/WeaponPivot/MeleeWeapon/Hurtbox"]

@@ -5,6 +5,6 @@ class_name HitBox
 
 func _on_area_entered(area: Area2D) -> void:
 	if area is HurtBox:
-		target.take_damage(area)
-		if area.weapon_node.is_launched:
-			area.weapon_node.return_to_hand()
+		if area.attacker is Projectile and area.attacker.collision_exception == self:
+			return
+		target.take_damage(area.attacker)

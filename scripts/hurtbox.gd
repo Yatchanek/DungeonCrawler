@@ -1,8 +1,7 @@
 extends Area2D
 class_name HurtBox
 
-@export var attacker : CharacterBody2D
-@export var weapon_node : Weapon
+@export var attacker : HurtEntity
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 
 func activate():

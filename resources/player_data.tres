@@ -7,5 +7,6 @@ script = ExtResource("1_fpjti")
 base_speed = 224
 base_damage = 1
 base_hp = 50
+base_charge_speed = 0.25
 acceleration = 384
 friction = 768

@@ -4,22 +4,23 @@
 [ext_resource type="Texture2D" uid="uid://dn8scuhk6t00x" path="res://graphics/units_rev.png" id="2_c4yn3"]
 [ext_resource type="Shader" path="res://resources/hit_flash.gdshader" id="2_h5fq1"]
 [ext_resource type="Resource" uid="uid://bj7luinfauo2l" path="res://resources/player_data.tres" id="2_j4gv3"]
-[ext_resource type="PackedScene" uid="uid://biviu72kq08r0" path="res://scenes/weapon.tscn" id="3_gx2qa"]
+[ext_resource type="PackedScene" uid="uid://biviu72kq08r0" path="res://scenes/melee_weapon.tscn" id="3_gx2qa"]
 [ext_resource type="PackedScene" uid="uid://bi1vwqbpbxlva" path="res://scenes/hitbox.tscn" id="4_yy1l1"]
 [ext_resource type="Script" path="res://scripts/fsm.gd" id="6_pr6ue"]
 [ext_resource type="Script" path="res://scripts/idle_state.gd" id="7_8jpp2"]
 [ext_resource type="Script" path="res://scripts/move_state.gd" id="8_7y8px"]
 [ext_resource type="Script" path="res://scripts/hit_state.gd" id="9_cdguj"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_2vk20"]
-size = Vector2(20, 7)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h2nn5"]
+resource_local_to_scene = true
+size = Vector2(26, 12)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5e4vt"]
 shader = ExtResource("2_h5fq1")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_modifier = 0.0
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_h2nn5"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c8acs"]
 resource_local_to_scene = true
 size = Vector2(26, 12)
 
@@ -120,9 +121,9 @@ motion_mode = 1
 script = ExtResource("1_5suny")
 Stats = ExtResource("2_j4gv3")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="Pivot_WeaponPivot_Weapon_Weapon_Hurtbox#CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -3.5)
-shape = SubResource("RectangleShape2D_2vk20")
+shape = SubResource("RectangleShape2D_h2nn5")
 
 [node name="Pivot" type="Marker2D" parent="."]
 
@@ -136,21 +137,22 @@ vframes = 6
 [node name="WeaponPivot" type="Marker2D" parent="Pivot"]
 position = Vector2(0, -14)
 
-[node name="Weapon" parent="Pivot/WeaponPivot" node_paths=PackedStringArray("weapon_pivot", "user") instance=ExtResource("3_gx2qa")]
+[node name="MeleeWeapon" parent="Pivot/WeaponPivot" node_paths=PackedStringArray("weapon_pivot") instance=ExtResource("3_gx2qa")]
 weapon_pivot = NodePath("..")
-user = NodePath("../../..")
 
-[node name="Weapon" parent="Pivot/WeaponPivot/Weapon" index="0"]
+[node name="Body" parent="Pivot/WeaponPivot/MeleeWeapon" index="0"]
 region_rect = Rect2(0, 0, 60, 24)
 
-[node name="Hurtbox" parent="Pivot/WeaponPivot/Weapon/Weapon" index="0" node_paths=PackedStringArray("attacker")]
-collision_layer = 2
-collision_mask = 20
-monitorable = true
-attacker = NodePath("../../../../..")
+[node name="ExplosionSpawnPosition" parent="Pivot/WeaponPivot/MeleeWeapon" index="2"]
+position = Vector2(40, 0)
 
-[node name="CollisionShape2D" parent="Pivot/WeaponPivot/Weapon/Weapon/Hurtbox" index="0"]
-shape = SubResource("RectangleShape2D_h2nn5")
+[node name="Hurtbox" parent="Pivot/WeaponPivot/MeleeWeapon" index="3"]
+collision_layer = 2
+collision_mask = 52
+
+[node name="CollisionShape2D" parent="Pivot/WeaponPivot/MeleeWeapon/Hurtbox" index="0"]
+position = Vector2(13, 0)
+shape = SubResource("RectangleShape2D_c8acs")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -158,7 +160,8 @@ libraries = {
 }
 
 [node name="Hitbox" parent="." node_paths=PackedStringArray("target") instance=ExtResource("4_yy1l1")]
-collision_mask = 0
+collision_mask = 8
+monitoring = true
 target = NodePath("..")
 
 [node name="CollisionShape2D" parent="Hitbox" index="0"]
@@ -181,15 +184,15 @@ script = ExtResource("8_7y8px")
 [node name="HitState" type="Node" parent="FSM"]
 script = ExtResource("9_cdguj")
 
-[node name="WeaponChargeTimer" type="Timer" parent="."]
+[node name="ChargeDelayTimer" type="Timer" parent="."]
 wait_time = 0.15
 one_shot = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
 [connection signal="animation_finished" from="AnimationPlayer" to="FSM" method="_on_animation_finished"]
-[connection signal="timeout" from="WeaponChargeTimer" to="." method="_on_weapon_charge_timer_timeout"]
+[connection signal="timeout" from="ChargeDelayTimer" to="." method="_on_charge_delay_timer_timeout"]
 
-[editable path="Pivot/WeaponPivot/Weapon"]
-[editable path="Pivot/WeaponPivot/Weapon/Weapon/Hurtbox"]
+[editable path="Pivot/WeaponPivot/MeleeWeapon"]
+[editable path="Pivot/WeaponPivot/MeleeWeapon/Hurtbox"]
 [editable path="Hitbox"]

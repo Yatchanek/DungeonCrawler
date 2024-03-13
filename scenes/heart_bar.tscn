@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://kn6sa0q1iind"]
+
+[ext_resource type="Texture2D" uid="uid://copgdv0equpx0" path="res://graphics/hearts_small.png" id="1_itcxt"]
+[ext_resource type="Script" path="res://scripts/heart_bar.gd" id="2_n5qjk"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sm4lk"]
+atlas = ExtResource("1_itcxt")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bjxr2"]
+atlas = ExtResource("1_itcxt")
+region = Rect2(0, 0, 16, 16)
+
+[node name="HeartBar" type="TextureProgressBar"]
+offset_right = 16.0
+offset_bottom = 16.0
+size_flags_horizontal = 0
+size_flags_vertical = 4
+max_value = 10.0
+step = 0.1
+fill_mode = 3
+texture_under = SubResource("AtlasTexture_sm4lk")
+texture_progress = SubResource("AtlasTexture_bjxr2")
+tint_under = Color(0.6, 0.6, 0.6, 1)
+script = ExtResource("2_n5qjk")

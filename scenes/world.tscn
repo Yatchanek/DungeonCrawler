@@ -1,9 +1,18 @@
-[gd_scene load_steps=5 format=3 uid="uid://c4kbrl661rnsd"]
+[gd_scene load_steps=11 format=3 uid="uid://c4kbrl661rnsd"]
 
 [ext_resource type="Script" path="res://scripts/world.gd" id="1_6y8hl"]
+[ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_fbf0w"]
 [ext_resource type="PackedScene" uid="uid://370mmql50j5e" path="res://scenes/player.tscn" id="2_aodlq"]
+[ext_resource type="PackedScene" uid="uid://cxqqpib6swlg" path="res://scenes/health_display.tscn" id="3_aufxa"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="4_wk5md"]
+[ext_resource type="Texture2D" uid="uid://d2toe8yrgo440" path="res://graphics/status_bar.png" id="5_kq71x"]
+[ext_resource type="Texture2D" uid="uid://dfl3vs548gcux" path="res://graphics/status_bar_progress.png" id="6_yk6iw"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_f48uu"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5xqnn"]
+resource_local_to_scene = true
+size = Vector2(26, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6y4ag"]
 resource_local_to_scene = true
 size = Vector2(26, 12)
 
@@ -11,25 +20,31 @@ size = Vector2(26, 12)
 resource_local_to_scene = true
 size = Vector2(18, 30)
 
-[node name="World" type="Node2D"]
+[node name="GameManager" type="Node"]
+script = ExtResource("1_fbf0w")
+
+[node name="World" type="Node2D" parent="."]
 y_sort_enabled = true
 texture_filter = 1
 script = ExtResource("1_6y8hl")
 
-[node name="Player" parent="." instance=ExtResource("2_aodlq")]
+[node name="Player" parent="World" instance=ExtResource("2_aodlq")]
 y_sort_enabled = true
 position = Vector2(250, 250)
 
-[node name="CollisionShape2D" parent="Player/Pivot/WeaponPivot/Weapon/Weapon/Hurtbox" index="0"]
-shape = SubResource("RectangleShape2D_f48uu")
+[node name="Pivot_WeaponPivot_Weapon_Weapon_Hurtbox#CollisionShape2D" parent="World/Player" index="0"]
+shape = SubResource("RectangleShape2D_5xqnn")
 
-[node name="CollisionShape2D" parent="Player/Hitbox" index="0"]
+[node name="CollisionShape2D" parent="World/Player/Pivot/WeaponPivot/MeleeWeapon/Hurtbox" index="0"]
+shape = SubResource("RectangleShape2D_6y4ag")
+
+[node name="CollisionShape2D" parent="World/Player/Hitbox" index="0"]
 shape = SubResource("RectangleShape2D_grh1q")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="World"]
 layer = -100
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+[node name="ColorRect" type="ColorRect" parent="World/CanvasLayer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -37,7 +52,33 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0.0588235, 1)
 
-[editable path="Player"]
-[editable path="Player/Pivot/WeaponPivot/Weapon"]
-[editable path="Player/Pivot/WeaponPivot/Weapon/Weapon/Hurtbox"]
-[editable path="Player/Hitbox"]
+[node name="HUD" type="CanvasLayer" parent="."]
+layer = 100
+script = ExtResource("4_wk5md")
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD"]
+offset_right = 72.0
+offset_bottom = 20.0
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/MarginContainer"]
+texture_filter = 1
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HealthDisplay" parent="HUD/MarginContainer/VBoxContainer" instance=ExtResource("3_aufxa")]
+layout_mode = 2
+
+[node name="ChargeBar" type="TextureProgressBar" parent="HUD/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(96, 12)
+layout_mode = 2
+nine_patch_stretch = true
+texture_over = ExtResource("5_kq71x")
+texture_progress = ExtResource("6_yk6iw")
+tint_progress = Color(1, 1, 0, 1)
+
+[editable path="World/Player"]
+[editable path="World/Player/Pivot/WeaponPivot/MeleeWeapon"]
+[editable path="World/Player/Pivot/WeaponPivot/MeleeWeapon/Hurtbox"]
+[editable path="World/Player/Hitbox"]

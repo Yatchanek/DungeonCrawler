@@ -1,12 +1,8 @@
 [gd_scene load_steps=10 format=3 uid="uid://biviu72kq08r0"]
 
-[ext_resource type="Script" path="res://scripts/weapon.gd" id="1_63i36"]
-[ext_resource type="Texture2D" uid="uid://nqwehqek3b63" path="res://graphics/weapon.png" id="2_87k33"]
-[ext_resource type="PackedScene" uid="uid://dh2yyloks6dse" path="res://scenes/hurtbox.tscn" id="3_ci8pr"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_h7hdq"]
-resource_local_to_scene = true
-size = Vector2(26, 12)
+[ext_resource type="Script" path="res://scripts/melee_weapon.gd" id="1_4hguv"]
+[ext_resource type="Texture2D" uid="uid://nqwehqek3b63" path="res://graphics/weapon.png" id="2_tik8y"]
+[ext_resource type="PackedScene" uid="uid://dh2yyloks6dse" path="res://scenes/hurtbox.tscn" id="3_q45yd"]
 
 [sub_resource type="Animation" id="Animation_ln4w6"]
 resource_name = "Charge"
@@ -16,14 +12,14 @@ step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Weapon:position")
+tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(30, 0), Vector2(31, 2), Vector2(30, -2), Vector2(30, 3), Vector2(30, 0), Vector2(31, -2), Vector2(30, 0), Vector2(31, 2), Vector2(30, -3), Vector2(31, 2), Vector2(30, 0)]
+"values": [Vector2(20, 0), Vector2(19, 2), Vector2(20, -2), Vector2(21, 3), Vector2(20, 0), Vector2(19, -2), Vector2(21, 0), Vector2(20, 2), Vector2(18, -3), Vector2(21, 2), Vector2(20, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_ylc6s"]
@@ -31,31 +27,31 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:rotation")
+tracks/0/path = NodePath("Hurtbox/CollisionShape2D:disabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
+"update": 1,
+"values": [true]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Weapon/Hurtbox/CollisionShape2D:disabled")
+tracks/1/path = NodePath(".:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"update": 0,
+"values": [Vector2(20, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Weapon:position")
+tracks/2/path = NodePath("Body:offset")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -67,14 +63,14 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath(".:position")
+tracks/3/path = NodePath("Body:position")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(15, 0)]
+"values": [Vector2(0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_5maqa"]
@@ -96,7 +92,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Weapon/Hurtbox/CollisionShape2D:disabled")
+tracks/1/path = NodePath("Hurtbox/CollisionShape2D:disabled")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -112,7 +108,7 @@ length = 0.8
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Weapon/Hurtbox/CollisionShape2D:disabled")
+tracks/0/path = NodePath("Hurtbox/CollisionShape2D:disabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -124,14 +120,14 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Weapon:position")
+tracks/1/path = NodePath(".:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.4, 0.6, 0.8),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(30, 0), Vector2(22, 0), Vector2(38, 0), Vector2(30, 0)]
+"values": [Vector2(20, 0), Vector2(5, 0), Vector2(40, 0), Vector2(20, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1o8wj"]
@@ -142,28 +138,21 @@ _data = {
 "Thrust": SubResource("Animation_rfdpi")
 }
 
-[node name="Weapon" type="Node2D"]
-y_sort_enabled = true
-position = Vector2(15, 0)
-script = ExtResource("1_63i36")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h7hdq"]
+resource_local_to_scene = true
+size = Vector2(26, 12)
 
-[node name="Weapon" type="Sprite2D" parent="."]
+[node name="MeleeWeapon" type="Node2D"]
+y_sort_enabled = true
+position = Vector2(20, 0)
+script = ExtResource("1_4hguv")
+
+[node name="Body" type="Sprite2D" parent="."]
 texture_filter = 1
-position = Vector2(30, 0)
-texture = ExtResource("2_87k33")
+texture = ExtResource("2_tik8y")
+offset = Vector2(30, 0)
 region_enabled = true
 region_rect = Rect2(0, 96, 60, 24)
-
-[node name="Hurtbox" parent="Weapon" node_paths=PackedStringArray("weapon_node") instance=ExtResource("3_ci8pr")]
-position = Vector2(-30, 0)
-collision_mask = 16
-monitorable = false
-weapon_node = NodePath("../..")
-
-[node name="CollisionShape2D" parent="Weapon/Hurtbox" index="0"]
-position = Vector2(29, 0)
-shape = SubResource("RectangleShape2D_h7hdq")
-disabled = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -171,8 +160,19 @@ libraries = {
 }
 speed_scale = 1.5
 
-[connection signal="area_entered" from="Weapon/Hurtbox" to="." method="_on_hurtbox_area_entered"]
-[connection signal="body_entered" from="Weapon/Hurtbox" to="." method="_on_hurtbox_body_entered"]
-[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[node name="ExplosionSpawnPosition" type="Marker2D" parent="."]
 
-[editable path="Weapon/Hurtbox"]
+[node name="Hurtbox" parent="." instance=ExtResource("3_q45yd")]
+position = Vector2(14, 0)
+collision_mask = 16
+
+[node name="CollisionShape2D" parent="Hurtbox" index="0"]
+position = Vector2(29, 0)
+shape = SubResource("RectangleShape2D_h7hdq")
+disabled = true
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_area_entered"]
+[connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_body_entered"]
+
+[editable path="Hurtbox"]

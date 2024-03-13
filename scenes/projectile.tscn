@@ -1,0 +1,42 @@
+[gd_scene load_steps=6 format=3 uid="uid://mb8obc8a8oak"]
+
+[ext_resource type="PackedScene" uid="uid://dh2yyloks6dse" path="res://scenes/hurtbox.tscn" id="1_60hxu"]
+[ext_resource type="Script" path="res://scripts/projectile.gd" id="1_jhr1b"]
+[ext_resource type="Texture2D" uid="uid://vs4m8qqa325i" path="res://graphics/explosion_circle.png" id="2_odqkt"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_x24tk"]
+radius = 6.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_v5bsb"]
+radius = 14.0357
+
+[node name="Projectile" type="Node2D"]
+top_level = true
+script = ExtResource("1_jhr1b")
+
+[node name="Core" type="Area2D" parent="."]
+top_level = true
+collision_layer = 8
+collision_mask = 53
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Core"]
+shape = SubResource("CircleShape2D_x24tk")
+
+[node name="Hurtbox" parent="." instance=ExtResource("1_60hxu")]
+collision_layer = 8
+collision_mask = 53
+
+[node name="CollisionShape2D" parent="Hurtbox" index="0"]
+shape = SubResource("CircleShape2D_v5bsb")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+self_modulate = Color(1, 0, 0, 0.4)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_odqkt")
+
+[connection signal="area_entered" from="Core" to="." method="_on_area_entered"]
+[connection signal="body_entered" from="Core" to="." method="_on_body_entered"]
+[connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_area_entered"]
+[connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_body_entered"]
+
+[editable path="Hurtbox"]

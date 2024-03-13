@@ -24,9 +24,7 @@ func physics_update(delta : float) -> void:
 			desired_velocity *= -1
 		elif dist_to_target < actor.unit_data.proximity_threshold * actor.unit_data.proximity_threshold * 1.05:
 			desired_velocity = Vector2.ZERO
-		else:
-			if randf() < 0.001:
-				actor.weapon.launch()
+
 		
 		if new_dir.x < 0:
 			pivot.scale.x = -1

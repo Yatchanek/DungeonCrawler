@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://wl1g6yao4owf"]
+
+[ext_resource type="Script" path="res://bpt_test.gd" id="1_fhc88"]
+
+[node name="Node" type="Node2D"]
+script = ExtResource("1_fhc88")

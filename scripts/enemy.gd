@@ -1,4 +1,5 @@
 extends CharacterBody2D
+class_name Enemy
 
 @export var attack_type : String = "Swing"
 @export var unit_data : EnemyData
@@ -6,12 +7,13 @@ extends CharacterBody2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var pivot: Marker2D = $Pivot
 @onready var fsm: FiniteStateMachine = $FSM
-@onready var weapon: Weapon = $Pivot/WeaponPivot/Weapon
-@onready var weapon_pivot: Marker2D = $Pivot/WeaponPivot
-@onready var attack_cooldown_timer: Timer = $AttackCooldownTimer
 @onready var chase_stop_timer: Timer = $ChaseStopTimer
 @onready var detector: Area2D = $Detector
-@onready var sensor_shape: CollisionShape2D = $AttackSensor/CollisionShape2D
+
+@onready var exclamation_mark: Label = $ExclamationMark
+@onready var ray_cast: RayCast2D = $RayCast
+
+var sensor_shape: CollisionShape2D
 
 var target : CharacterBody2D
 
@@ -25,10 +27,12 @@ var friction : int
 
 func _ready() -> void:
 	set_stats()
+	if has_node("AttackSensor"):
+		sensor_shape = $AttackSensor/CollisionShape2D
+	
 	
 func rotate_weapon():
-	if is_instance_valid(target):
-		weapon_pivot.look_at(target.global_position + Vector2(0, -20))
+	pass
 
 func set_stats():
 	current_damage = unit_data.base_damage
@@ -36,33 +40,30 @@ func set_stats():
 	max_speed = unit_data.base_speed
 	acceleration = unit_data.acceleration
 	friction = unit_data.friction
-	
-	weapon.set_damage(current_damage)
-	
+	if has_node("Pivot/WeaponPivot/Weapon"):
+		$Pivot/WeaponPivot/Weapon.initialize_damage(current_damage)	
 	
 func attack() -> bool:
-	return weapon.attack(attack_type)
+	return false
 
-func take_damage(_weapon : Weapon, _knockback : bool = false):
-	current_hp -= _weapon.current_damage
+func take_damage(hit_by : HurtEntity):
+	current_hp -= hit_by.current_damage
 	if current_hp <= 0:
 		is_dead = true
 		queue_free()
 	else:
-		if check_if_player_in_sight(_weapon.user):
-			target = _weapon.user
-			fsm.transition("MoveState")
-		if _knockback:
-			knockback(_weapon)
+		if hit_by is Trap:
+			fsm.transition("HitState")
+		elif check_if_player_in_sight():
+			target = EnemyManager.player
+			fsm.transition("HitState")
+		if hit_by.has_knockback:
+			knockback(hit_by)
 
-func knockback(hit_by : Weapon):
+func knockback(hit_by : HurtEntity):
 	var direction : Vector2
 	var force : float = min(hit_by.current_damage * 100, 200)
-	if hit_by.is_launched:
-		direction = global_position.direction_to(hit_by.global_position) * -1
-		
-	else:
-		direction = global_position.direction_to(hit_by.user.global_position) * -1
+	direction = global_position.direction_to(hit_by.global_position) * -1
 	velocity = direction * force
 	fsm.transition("HitState")	
 
@@ -73,39 +74,34 @@ func enable_attack_sensor():
 	sensor_shape.set_deferred("disabled", false)
 
 func _on_detector_body_entered(body: Node2D) -> void:
-	target = body
-	fsm.transition("MoveState")
+	if fsm.current_state.name == "IdleState":
+		target = body
+		fsm.transition("AlertState")
 
 func _on_detector_body_exited(_body: Node2D) -> void:
-	if !is_dead:
-		chase_stop_timer.start()
+	pass
 
 
-func _on_attack_sensor_area_entered(area : Area2D) -> void:
-	if area is HitBox:
-		fsm.transition("AttackState")
+func _on_attack_sensor_area_entered(_area : Area2D) -> void:
+	pass
 
 
 func _on_attack_cooldown_timer_timeout() -> void:
-	enable_attack_sensor()
+	pass
 
 
 func _on_chase_stop_timer_timeout() -> void:
-	if check_if_player_in_sight(target):
-		chase_stop_timer.start()
-	else:
-		target = null
-		if fsm.current_state.name != "HitState":
-			fsm.transition("IdleState")
+	pass
 
-func check_if_player_in_sight(_player) -> bool:
+func check_if_player_in_sight() -> bool:
+	if is_dead:
+		return false
 	if detector.get_overlapping_bodies().size() == 0:
 		var state : PhysicsDirectSpaceState2D = get_world_2d().direct_space_state
-		var query : PhysicsRayQueryParameters2D = PhysicsRayQueryParameters2D.create(global_position, _player.global_position, 17)
+		var query : PhysicsRayQueryParameters2D = PhysicsRayQueryParameters2D.create(global_position, EnemyManager.player.global_position, 17)
 		var result : Dictionary = state.intersect_ray(query)
 		if result and result.collider is Player:
 			return true
-	
 		else:
 			return false
 	else:

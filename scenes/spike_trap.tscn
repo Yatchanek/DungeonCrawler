@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://cy8cme16653h8"]
 
-[ext_resource type="Script" path="res://spike_trap.gd" id="1_o302a"]
+[ext_resource type="Script" path="res://scripts/spike_trap.gd" id="1_2mbtq"]
 [ext_resource type="Texture2D" uid="uid://byjv7meqsd6p2" path="res://graphics/0x72_DungeonTilesetII_v1.6.png" id="2_h2q08"]
 [ext_resource type="PackedScene" uid="uid://dh2yyloks6dse" path="res://scenes/hurtbox.tscn" id="3_d4i6w"]
 
@@ -98,7 +98,7 @@ size = Vector2(32, 32)
 
 [node name="SpikeTrap" type="Node2D"]
 z_index = -1
-script = ExtResource("1_o302a")
+script = ExtResource("1_2mbtq")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
@@ -112,9 +112,11 @@ libraries = {
 "": SubResource("AnimationLibrary_db8kt")
 }
 
-[node name="Hurtbox" parent="." instance=ExtResource("3_d4i6w")]
-collision_layer = 0
-monitorable = false
+[node name="Hurtbox" parent="." node_paths=PackedStringArray("attacker") instance=ExtResource("3_d4i6w")]
+collision_layer = 9
+collision_mask = 0
+monitoring = false
+attacker = NodePath("..")
 
 [node name="CollisionShape2D" parent="Hurtbox" index="0"]
 position = Vector2(0, -0.5)
@@ -123,12 +125,12 @@ disabled = true
 
 [node name="Detector" type="Area2D" parent="."]
 collision_layer = 0
+collision_mask = 5
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Detector"]
 shape = SubResource("RectangleShape2D_6ef3l")
 
-[connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_area_entered"]
 [connection signal="body_entered" from="Detector" to="." method="_on_detector_body_entered"]
 
 [editable path="Hurtbox"]

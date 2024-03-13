@@ -21,5 +21,7 @@ layer_1/tile_data = PackedInt32Array()
 
 [node name="Detector" type="Area2D" parent="."]
 z_index = 5
+collision_layer = 0
+monitorable = false
 
 [connection signal="body_entered" from="Detector" to="." method="_on_detector_body_entered"]

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://mxs2njr6pruj"]
+
+[ext_resource type="Script" path="res://scripts/unit_data.gd" id="1_it7o2"]
+
+[resource]
+script = ExtResource("1_it7o2")
+base_speed = 320
+base_damage = 10
+base_hp = 1
+acceleration = 640
+friction = 1980
+attack_type = "Swing"
+proximity_threshold = 46.0

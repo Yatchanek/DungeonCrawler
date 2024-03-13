@@ -2,6 +2,8 @@ extends Node2D
 
 var room_scene = preload("res://scenes/room.tscn")
 
+
+
 var grid = {}
 var room_dict = {}
 
@@ -59,6 +61,7 @@ func _ready() -> void:
 	await  get_tree().process_frame
 	$Player.global_position = to_global(starting_room.middle_point)
 	EnemyManager.enemy_spawned.connect(_on_enemy_spawned)
+
 
 func add_room(coords):
 	if grid.has(coords):
@@ -123,7 +126,7 @@ func destroy_distant_rooms(current_coords):
 		if abs(coords.x - current_coords.x) > 1 or abs(coords.y - current_coords.y) > 1:
 			grid.erase(coords)
 			var query = PhysicsShapeQueryParameters2D.new()
-			query.collision_mask = 2
+			query.collision_mask = 4
 			query.shape = RectangleShape2D.new()
 			query.shape.size = Vector2(30, 30) * 32
 			query.transform.origin = Vector2(coords) * 30 * 32 + Vector2(15, 15) * 32
@@ -145,3 +148,5 @@ func _on_spawn_area_reached(coords, is_new_room):
 func _on_enemy_spawned(enemy : CharacterBody2D, coords : Vector2i):
 	enemy.position += room_dict[coords].position
 	call_deferred("add_child", enemy)
+
+
